@@ -39,7 +39,7 @@ else
 fi
 
 DIR2=/etc/nvidia-container-runtime
-if [ -d "$DIR" ]; then
+if [ -d "$DIR2" ]; then
 
         echo ">> Nvidia-Docker2 exists <<!"
         sleep 2
