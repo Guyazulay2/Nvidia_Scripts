@@ -58,6 +58,9 @@ else
         sudo apt-get update && sudo apt-get install -y nvidia-docker2
         sudo systemctl restart docker
         sleep 3; nvidia-smi
+        
+       echo "******* Will Reboot Now *********"
+       reboot
 
 fi
 
