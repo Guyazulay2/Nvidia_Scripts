@@ -1,16 +1,25 @@
 #!/bin/bash
 
-echo "** Install Docker **"
-sudo apt update
-sudo apt install apt-transport-https ca-certificates curl software-properties-common
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
-sudo apt update
-sudo apt upgrade -y 
-apt-cache policy docker-ce
-sudo apt install docker-ce -y 
-echo "** Docker installed Successfully **"
 
+if [ "$(dpkg -l | awk '/docker-ce/ {print }'|wc -l)" -ge 1 ]; then
+
+        echo "--- Docker-ce exists ---!"
+
+else
+
+        echo "** Install Docker **"
+        sudo apt update
+        sudo apt install apt-transport-https ca-certificates curl software-properties-common
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+        sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+        sudo apt update
+        sudo apt upgrade -y 
+        apt-cache policy docker-ce
+        sudo apt install docker-ce -y 
+        sleep 2
+        echo "** Docker installed Successfully **"
+
+fi
 
 if [ "$(dpkg -l | awk '/gstreamer/ {print }'|wc -l)" -ge 1 ]; then
 
