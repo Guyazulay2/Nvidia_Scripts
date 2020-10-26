@@ -1,7 +1,6 @@
 #!/bin/bash
 
 echo "** Install Docker **"
-
 sudo apt update
 sudo apt install apt-transport-https ca-certificates curl software-properties-common
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -10,19 +9,30 @@ sudo apt update
 sudo apt upgrade -y 
 apt-cache policy docker-ce
 sudo apt install docker-ce -y 
-
 echo "** Docker installed Successfully **"
 
 
+if [ "$(dpkg -l | awk '/gstreamer/ {print }'|wc -l)" -ge 1 ]; then
 
-DIR=/usr/local/cuda/
-if [ -d "$DIR" ]; then
+        echo "--- Gstreamer Are installed ---!"
 
-        echo ">> Cuda exists <<!"
-        sleep 2
 else
 
-        echo "<< Install cuda 10.2 >>"
+        echo -e "Gstreamer Not installed !/n Installing now ..."
+        sudo apt-get update
+        sudo apt-get install -y gstreamer1.0-tools gstreamer1.0-nice gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-pl$
+        echp "Done !"
+fi
+
+
+
+if [ "$(dpkg -l | awk '/cuda-10-2/ {print }'|wc -l)" -ge 1 ]; then
+
+        echo "--- Cuda exists ---!"
+        sleep 1
+else
+
+        echo -e "Cuda Not installed !/n installing now cuda 10.2 >>"
         wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-ubuntu1804.pin
 
         sudo mv cuda-ubuntu1804.pin /etc/apt/preferences.d/cuda-repository-pin-600
@@ -34,16 +44,15 @@ else
         sudo apt-key add /var/cuda-repo-10-2-local-10.2.89-440.33.01/7fa2af80.pub
         sudo apt-get update
         sudo apt-get -y install cuda
-
-        sleep 3
+        echo "Done !"
+        sleep 2
 
 fi
 
-DIR2=/etc/nvidia-container-runtime
-if [ -d "$DIR2" ]; then
+if [ "$(dpkg -l | awk '/nvidia-docker2/ {print }'|wc -l)" -ge 1 ]; then
 
-        echo ">> Nvidia-Docker2 exists <<!"
-        sleep 2
+        echo "--- Nvidia-Docker2 exists ---!"
+        sleep 1
 else
 
         echo "<< Install nvidia-docker >>"
@@ -57,9 +66,9 @@ else
 
         sudo apt-get update && sudo apt-get install -y nvidia-docker2
         sudo systemctl restart docker
-        sleep 3; nvidia-smi
+        sleep 2; nvidia-smi
         
-       echo "******* Will Reboot Now *********"
+       echo "******* Reboot Now *********"
        reboot
 
 fi
